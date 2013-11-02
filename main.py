@@ -6,8 +6,6 @@ import cgi
 import bottle
 import pymongo
 from pymongo import MongoClient
-import twilio.twiml
-from twilio.rest import TwilioRestClient
 
 bottle.debug(True)
 client = MongoClient(os.environ['MONGOLAB_URI'])
@@ -17,7 +15,7 @@ mongo_db = client.get_default_database()
 @bottle.route('/', method="get")
 @bottle.view('priorities')
 def index():
-    # return str("hello world")
+    return dict(name=None)
 
 
 @bottle.route('/static/<filepath:path>')
@@ -31,24 +29,28 @@ def recieve_txts():
     # resp = twilio.twiml.Response()
     post_response = {x: y for x, y in bottle.request.forms.iteritems()}
     db.insert(post_response)
+    bottle.redirect("/results/")
 
 
 @bottle.route('/results/', method="get")
-@bottle.view('priorities')
+@bottle.view('results')
 def display_txts():
     db = mongo_db.priorities
-    try:
-        cursor = db.find({"To":To}, limit=10).sort("_id", pymongo.DESCENDING)
-        messages = []
-        for message in cursor:
-            messages.append(message)
-
-            #str(cursor["_id"].generation_time)
-        return dict(messages=messages, To=To)
+    return {"results":[1,2,3]}
 
 
-    except:
-        bottle.abort(404, "Sorry, nothing found")
+    # try:
+    #     # cursor = db.find({"To":To}, limit=10).sort("_id", pymongo.DESCENDING)
+    #     # messages = []
+    #     # for message in cursor:
+    #     #     messages.append(message)
+
+    #     #     #str(cursor["_id"].generation_time)
+    #     # return dict(messages=messages, To=To)
+
+
+    # except:
+    #     bottle.abort(404, "Sorry, nothing found")
 
 
 # counter = mongo_db.counter.find_one()
