@@ -1,6 +1,6 @@
 %rebase _base
 <div class="page-header">
-    <p class="center-block">Drag the items into the order <em>you</em> think is important, from top to bottom.</p>
+    <p class="lead">Drag the items into the order <em>you</em> think is important, from top to bottom.</p>
 </div>
 <form id="priorities_form" role="form" action="/vote/" method="post">
   <section id="priorities" class="col-xs-12 col-sm-6">
