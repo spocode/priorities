@@ -15,11 +15,11 @@
 
 <div class="panel panel-default">
   <!-- Default panel contents -->
-  <div class="panel-heading">Results are weighted. Lower numbers are better.</div>
+  <div class="panel-heading">Results are weighted. Higher numbers are better.</div>
   </div>
 <ul class="list-group">
 % for key, value in results.iteritems():
-  <li class="list-group-item">{{key.title()}} <span class="badge">{{value}}</span></li>
+  <li class="list-group-item">{{key.title()}} <span class="badge">{{"{0:.2f}".format(value)}}</span></li>
 % end
 </ul>
 % labels = ["health","environment","business","community","safety","education","transportation"]
@@ -42,8 +42,8 @@ var data = {
   ]
 }
 options = {
-  scaleFontFamily : "'Merriweather Sans'",
-  pointLabelFontFamily : "'Merriweather Sans'",
+  scaleFontFamily : "'Proxima Nova'",
+  pointLabelFontFamily : "'Proxima Nova'",
 };
 new Chart(ctx).Radar(data,options);
 </script>

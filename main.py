@@ -55,9 +55,9 @@ def display_txts():
 
             for i, issue in enumerate(result['priorities_list']):
                 try:
-                    counts[issue] += i+1
+                    counts[issue] += 1.0/(i+1)
                 except:
-                    counts[issue] = i+1
+                    counts[issue] = 1.0/(i+1)
 
 
         return dict(results=counts)
