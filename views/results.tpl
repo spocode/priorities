@@ -1,15 +1,53 @@
 %rebase _base
 <div class="page-header">
-    <p class="center-block">Results</p>
+    <h1>Results</h1>
 </div>
 
 <section class="col-xs-12 col-sm-6">
-<p>hi</p>
 
-% for i,message in enumerate(results):
-  {{i}}
-% end
+
+<canvas id="myChart" width="540" height="400"></canvas>
+
+
 </section>
 <section class="col-xs-12 col-sm-6">
-<p>hello</p>
+
+
+<div class="panel panel-default">
+  <!-- Default panel contents -->
+  <div class="panel-heading">Results are weighted. Lower numbers are better.</div>
+  </div>
+<ul class="list-group">
+% for key, value in results.iteritems():
+  <li class="list-group-item">{{key.title()}} <span class="badge">{{value}}</span></li>
+% end
+</ul>
+% labels = ["health","environment","business","community","safety","education","transportation"]
+</div>
 </section>
+
+<script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/Chart.js/0.2.0/Chart.min.js"></script>
+<script>
+var ctx = document.getElementById("myChart").getContext("2d");
+var data = {
+  labels : ["Health","Environment","Business","Community","Safety","Education","Transportation"],
+  datasets : [
+    {
+      fillColor : "rgba(151,187,205,0.5)",
+      strokeColor : "rgba(151,187,205,1)",
+      pointColor : "rgba(151,187,205,1)",
+      pointStrokeColor : "#fff",
+      data : {{repr([results[key] for key in labels])}}
+    },
+  ]
+}
+options = {
+  scaleFontFamily : "'Merriweather Sans'",
+  pointLabelFontFamily : "'Merriweather Sans'",
+};
+new Chart(ctx).Radar(data,options);
+</script>
+
+
+
+

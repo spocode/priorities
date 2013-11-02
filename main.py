@@ -26,34 +26,44 @@ def server_static(filepath):
 @bottle.route('/vote/', method="post")
 def recieve_txts():
     db = mongo_db.priorities
-    # resp = twilio.twiml.Response()
-    post_response = {x: y for x, y in bottle.request.forms.iteritems()}
-    db.insert(post_response)
+
+    post_response = {
+        "status": bottle.request.forms.get('status'),
+        "zip": bottle.request.forms.get('zip'),
+        "priorities_list": bottle.request.forms.get('priorities_list').split(","),
+        "years": bottle.request.forms.get('years')
+    }
+    insert = db.insert(post_response)
+    # return repr(insert)
     bottle.redirect("/results/")
+
+
 
 
 @bottle.route('/results/', method="get")
 @bottle.view('results')
 def display_txts():
     db = mongo_db.priorities
-    return {"results":[1,2,3]}
+    # return {"results":[1,2,3]}
 
 
-    # try:
-    #     # cursor = db.find({"To":To}, limit=10).sort("_id", pymongo.DESCENDING)
-    #     # messages = []
-    #     # for message in cursor:
-    #     #     messages.append(message)
+    try:
+        cursor = db.find()
+        counts = {}
+        for result in cursor:
+            # print repr(result['priorities_list'])
 
-    #     #     #str(cursor["_id"].generation_time)
-    #     # return dict(messages=messages, To=To)
+            for i, issue in enumerate(result['priorities_list']):
+                try:
+                    counts[issue] += i+1
+                except:
+                    counts[issue] = i+1
 
 
-    # except:
-    #     bottle.abort(404, "Sorry, nothing found")
+        return dict(results=counts)
+    except Exception as e:
+        bottle.abort(500, e)
 
-
-# counter = mongo_db.counter.find_one()
 
 
 port = int(os.environ.get("PORT", 5000))
